@@ -1,5 +1,3 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
-
 // --- THREE.JS SCENE SETUP ---
 const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(0x0a0a1a, 100, 200);

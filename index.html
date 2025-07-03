@@ -4,12 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Center Explorer Resume</title>
-    <!-- Tailwind CSS for UI styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Roboto Mono for a terminal-like feel -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles/main.css">
+    <!-- Tailwind CSS for UI styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Fallback for Tailwind if it fails to load
+        if (typeof tailwind === 'undefined') {
+            console.warn('Tailwind CSS failed to load, using fallback styles');
+            const fallbackStyles = document.createElement('style');
+            fallbackStyles.textContent = `
+                .fixed { position: fixed; }
+                .top-4 { top: 1rem; }
+                .left-4 { left: 1rem; }
+                .z-20 { z-index: 20; }
+                .bg-black { background-color: black; }
+                .bg-opacity-50 { background-color: rgba(0,0,0,0.5); }
+                .text-white { color: white; }
+                .p-3 { padding: 0.75rem; }
+                .rounded-lg { border-radius: 0.5rem; }
+                .text-sm { font-size: 0.875rem; }
+                .max-w-xs { max-width: 20rem; }
+                .font-bold { font-weight: bold; }
+                .text-cyan-400 { color: #22d3ee; }
+                .mb-2 { margin-bottom: 0.5rem; }
+                .mb-1 { margin-bottom: 0.25rem; }
+                .text-xs { font-size: 0.75rem; }
+                .text-gray-400 { color: #9ca3af; }
+                .mt-2 { margin-top: 0.5rem; }
+                .text-2xl { font-size: 1.5rem; }
+                .mb-4 { margin-bottom: 1rem; }
+                .text-gray-300 { color: #d1d5db; }
+                .text-center { text-align: center; }
+                .space-y-2 > * + * { margin-top: 0.5rem; }
+                .mt-4 { margin-top: 1rem; }
+                .text-lg { font-size: 1.125rem; }
+                .flex { display: flex; }
+                .justify-center { justify-content: center; }
+                .space-x-4 > * + * { margin-left: 1rem; }
+                .mt-6 { margin-top: 1.5rem; }
+                .hover\\:text-cyan-300:hover { color: #67e8f9; }
+                .hover\\:underline:hover { text-decoration: underline; }
+                .mt-2 { margin-top: 0.5rem; }
+                .inline-block { display: inline-block; }
+                .grid { display: grid; }
+                .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+                .md\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+                .gap-4 { gap: 1rem; }
+                .space-y-1 > * + * { margin-top: 0.25rem; }
+                .hidden { display: none; }
+            `;
+            document.head.appendChild(fallbackStyles);
+        }
+    </script>
 </head>
 <body>
     <!-- 3D Background Canvas -->
@@ -128,7 +177,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
+    <!-- Three.js (non-module version to avoid MIME type issues) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r165/three.min.js"></script>
+    
     <!-- Custom JavaScript -->
-    <script type="module" src="js/main.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
