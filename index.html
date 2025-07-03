@@ -346,39 +346,100 @@
 
         function navigateToNode(targetNode) {
             const targetPosition = targetNode.position.clone();
+            
+            // First, move down the aisle to the rack's Z position
+            const aislePosition = new THREE.Vector3(0, 8, targetPosition.z);
+            
+            // Then, turn toward the rack (move to the side)
             const finalPosition = new THREE.Vector3(targetPosition.x + 12, targetPosition.y, targetPosition.z);
 
             if (currentZoomAnimation) {
                 currentZoomAnimation.kill();
             }
 
-            currentZoomAnimation = gsap.to(camera.position, {
+            // Create a timeline for the multi-step animation
+            const tl = gsap.timeline();
+            
+            // Step 1: Move down the aisle
+            tl.to(camera.position, {
+                x: aislePosition.x,
+                y: aislePosition.y,
+                z: aislePosition.z,
+                duration: 1.0,
+                ease: "power2.inOut",
+            });
+            
+            // Step 2: Turn toward the rack
+            tl.to(camera.position, {
                 x: finalPosition.x,
                 y: finalPosition.y,
                 z: finalPosition.z,
-                duration: 1.5,
-                ease: "power3.inOut",
-            });
+                duration: 0.8,
+                ease: "power2.out",
+            }, "-=0.2"); // Slight overlap for smoother transition
+            
+            // Show panel after the movement is complete
+            tl.call(() => {
+                showPanel(`#panel-${targetNode.userData.name}`);
+            }, null, null, "+=0.1");
+            
+            // Add a subtle camera look-at effect toward the rack
+            const originalLookAt = targetLookAt.clone();
+            const rackLookAt = new THREE.Vector3(targetPosition.x, targetPosition.y, targetPosition.z);
+            
+            tl.to(targetLookAt, {
+                x: rackLookAt.x,
+                y: rackLookAt.y,
+                z: rackLookAt.z,
+                duration: 0.5,
+                ease: "power2.out",
+            }, "-=0.3");
 
-            showPanel(`#panel-${targetNode.userData.name}`);
+            currentZoomAnimation = tl;
         }
 
         function returnToAisleView() {
             if (currentZoomAnimation) {
                 currentZoomAnimation.kill();
             }
+            
             const currentScroll = window.scrollY || document.documentElement.scrollTop;
             const scrollPercent = currentScroll / (document.documentElement.scrollHeight - window.innerHeight);
             const targetZ = 40 - 220 * scrollPercent;
 
-            gsap.to(camera.position, {
+            // Create a timeline for the return animation
+            const tl = gsap.timeline();
+            
+            // Step 1: Return to the center aisle first
+            tl.to(camera.position, {
+                x: 0,
+                y: 8,
+                z: camera.position.z, // Stay at current Z position
+                duration: 0.8,
+                ease: "power2.inOut",
+            });
+            
+            // Step 2: Then move to the scroll position
+            tl.to(camera.position, {
                 x: 0,
                 y: 8,
                 z: targetZ,
-                duration: 1.5,
-                ease: "power3.inOut",
-            });
-            gsap.to(".info-panel", { opacity: 0, visibility: 'hidden', duration: 0.5 });
+                duration: 1.0,
+                ease: "power2.out",
+            }, "-=0.2");
+            
+            // Hide panel immediately when starting the return
+            gsap.to(".info-panel", { opacity: 0, visibility: 'hidden', duration: 0.3 });
+            
+            // Reset camera look-at to forward direction
+            const forwardLookAt = new THREE.Vector3(0, 5, targetZ - 20);
+            tl.to(targetLookAt, {
+                x: forwardLookAt.x,
+                y: forwardLookAt.y,
+                z: forwardLookAt.z,
+                duration: 0.8,
+                ease: "power2.out",
+            }, "-=0.5");
         }
 
         function showPanel(panelId) {
