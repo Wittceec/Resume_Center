@@ -110,18 +110,29 @@
     <div id="panel-about" class="info-panel" aria-modal="true" role="dialog">
         <button class="exit-button" aria-label="Close panel">[x]</button>
         <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Rack_01: Mainframe (About)</h2>
-        <p>I am a network and Linux enthusiast with a deep passion for understanding how systems communicate. My journey began with a curiosity for the command line and has evolved into a career dedicated to building and maintaining robust, secure network infrastructures.</p>
+        <p class="mb-4">I am a passionate IT professional with extensive data center experience, specializing in network infrastructure and Linux systems administration. My journey in technology began with a fascination for how data flows through networks and has evolved into a career focused on building, maintaining, and securing enterprise-level infrastructure.</p>
+        <p class="text-sm text-gray-300">Currently working in data center operations while pursuing advanced networking and Linux administration skills. I thrive in environments where I can solve complex technical challenges and optimize system performance.</p>
     </div>
     <div id="panel-experience" class="info-panel" aria-modal="true" role="dialog">
         <button class="exit-button" aria-label="Close panel">[x]</button>
         <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Rack_02: Core_Router (Experience)</h2>
         <div id="experience-content">
-            <h3 class="font-bold text-white">Network Administrator | Tech Corp</h3>
-            <p class="text-sm text-gray-400 mb-2">2021 - Present</p>
+            <h3 class="font-bold text-white">Data Center Technician | Enterprise Solutions Inc.</h3>
+            <p class="text-sm text-gray-400 mb-2">2022 - Present</p>
+            <ul class="list-disc list-inside text-gray-300 mb-4">
+                <li>Maintain and troubleshoot enterprise server infrastructure across multiple data centers</li>
+                <li>Perform hardware installations, upgrades, and preventive maintenance on server racks</li>
+                <li>Monitor network connectivity and respond to infrastructure alerts</li>
+                <li>Document procedures and maintain accurate inventory records</li>
+            </ul>
+            
+            <h3 class="font-bold text-white">IT Support Specialist | TechStart Solutions</h3>
+            <p class="text-sm text-gray-400 mb-2">2020 - 2022</p>
             <ul class="list-disc list-inside text-gray-300">
-                <li>Managed and monitored a network of 200+ Linux servers.</li>
-                <li>Implemented security protocols and firewall configurations.</li>
-                <li>Automated system updates using Bash and Python scripts.</li>
+                <li>Provided technical support for Windows and Linux environments</li>
+                <li>Managed Active Directory and implemented group policies</li>
+                <li>Configured and maintained network switches and wireless infrastructure</li>
+                <li>Developed PowerShell and Bash scripts for automation tasks</li>
             </ul>
         </div>
         <button id="generate-cover-letter" class="gemini-button">✨ Generate Cover Letter Snippet</button>
@@ -131,18 +142,63 @@
         <button class="exit-button" aria-label="Close panel">[x]</button>
         <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Rack_03: Project_Server (Projects)</h2>
         <div id="project-content">
-            <h3 class="font-bold text-white">Home Lab Network</h3>
-            <p class="text-gray-300">Designed and built a segmented home network with pfSense, running services like Pi-hole and a local file server on a Proxmox virtual environment.</p>
+            <h3 class="font-bold text-white">Enterprise Home Lab Network</h3>
+            <p class="text-gray-300 mb-4">Designed and built a production-like home network environment using enterprise-grade equipment. Implemented VLAN segmentation, firewall rules, and monitoring systems to simulate real-world data center scenarios.</p>
+            
+            <h3 class="font-bold text-white">Linux Server Automation Suite</h3>
+            <p class="text-gray-300 mb-4">Developed a comprehensive automation toolkit using Bash and Python for server provisioning, monitoring, and maintenance tasks. Includes log analysis, backup automation, and system health monitoring.</p>
+            
+            <h3 class="font-bold text-white">Network Monitoring Dashboard</h3>
+            <p class="text-gray-300">Created a web-based monitoring solution using Grafana and Prometheus to track network performance, server metrics, and alert on critical issues.</p>
             <a href="#" class="text-cyan-400 hover:underline mt-2 inline-block">View on GitHub &rarr;</a>
         </div>
         <button id="generate-suggestions" class="gemini-button">✨ Suggest Project Improvements</button>
         <div id="project-output" class="gemini-output hidden"></div>
     </div>
+    <div id="panel-skills" class="info-panel" aria-modal="true" role="dialog">
+        <button class="exit-button" aria-label="Close panel">[x]</button>
+        <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Rack_04: Skills_Matrix (Skills & Certifications)</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <h3 class="font-bold text-white mb-2">Technical Skills</h3>
+                <ul class="text-sm text-gray-300 space-y-1">
+                    <li>• Linux Administration (Ubuntu, CentOS, RHEL)</li>
+                    <li>• Network Configuration & Troubleshooting</li>
+                    <li>• Server Hardware Maintenance</li>
+                    <li>• Virtualization (VMware, Proxmox)</li>
+                    <li>• Scripting (Bash, Python, PowerShell)</li>
+                    <li>• Monitoring Tools (Nagios, Zabbix)</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold text-white mb-2">Certifications</h3>
+                <ul class="text-sm text-gray-300 space-y-1">
+                    <li>• CompTIA A+ (2023)</li>
+                    <li>• CompTIA Network+ (2023)</li>
+                    <li>• Linux+ (In Progress)</li>
+                    <li>• CCNA (Planned)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-4">
+            <h3 class="font-bold text-white mb-2">Tools & Technologies</h3>
+            <p class="text-sm text-gray-300">pfSense, Grafana, Prometheus, Git, Docker, Ansible, Cisco IOS, Wireshark, tcpdump, iptables, systemd, cron, rsync</p>
+        </div>
+    </div>
     <div id="panel-contact" class="info-panel text-center" aria-modal="true" role="dialog">
         <button class="exit-button" aria-label="Close panel">[x]</button>
-        <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Rack_04: WAN_Gateway (Contact)</h2>
+        <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Rack_05: WAN_Gateway (Contact)</h2>
         <p>You've reached the edge of the network. Let's connect.</p>
-        <p class="text-lg text-white mt-4">your.email@example.com</p>
+        <div class="space-y-2 mt-4">
+            <p class="text-lg text-white">📧 your.email@example.com</p>
+            <p class="text-lg text-white">📱 (555) 123-4567</p>
+            <p class="text-lg text-white">📍 City, State</p>
+        </div>
+        <div class="flex justify-center space-x-4 mt-6">
+            <a href="#" class="text-cyan-400 hover:text-cyan-300">LinkedIn</a>
+            <a href="#" class="text-cyan-400 hover:text-cyan-300">GitHub</a>
+            <a href="#" class="text-cyan-400 hover:text-cyan-300">Resume PDF</a>
+        </div>
     </div>
 
     <!-- GSAP Libraries -->
@@ -211,8 +267,8 @@
         }
 
         // --- PLACING RACKS IN THE SCENE ---
-        const sections = ["about", "experience", "projects", "contact"];
-        const heroRackPositions = [-10, -50, -90, -130];
+        const sections = ["about", "experience", "projects", "skills", "contact"];
+        const heroRackPositions = [-10, -50, -90, -130, -170];
         const heroRacks = [];
 
         for (let i = 0; i < 20; i++) {
