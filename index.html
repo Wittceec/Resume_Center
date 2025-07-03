@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Center Explorer Resume</title>
+    <!-- Tailwind CSS for UI styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Roboto Mono for a terminal-like feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #0a0a1a;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 1;
+        }
+        #scroll-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100vw; height: 500vh;
+            z-index: 2;
+        }
+        .info-panel {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90vw; max-width: 500px;
+            background: rgba(10, 25, 47, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid #38bdf8;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            z-index: 10;
+            visibility: hidden;
+            opacity: 0;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.3);
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        .exit-button {
+            position: absolute;
+            top: 0.5rem; right: 0.75rem;
+            font-size: 1.5rem;
+            color: #f87171;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .exit-button:hover { color: #ef4444; }
+        .gemini-button {
+            background-color: #38bdf8;
+            color: #0a0a1a;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 1rem;
+        }
+        .gemini-button:hover { background-color: #7dd3fc; }
+        .gemini-output {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 0.5rem;
+            border: 1px dashed #0e7490;
+            min-height: 50px;
+            white-space: pre-wrap;
+        }
+        .loading-indicator {
+            display: inline-block;
+            width: 1em; height: 1em;
+            border: 2px solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 0.5rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 600px) {
+            .info-panel { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+    <div id="scroll-container"></div>
+
+    <!-- UI Panels for each section -->
+    <div id="panel-about" class="info-panel" aria-modal="true" role="dialog">
+        <button class="exit-button" aria-label="Close panel">[x]</button>
+        <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Rack_01: Mainframe (About)</h2>
+        <p>I am a network and Linux enthusiast with a deep passion for understanding how systems communicate. My journey began with a curiosity for the command line and has evolved into a career dedicated to building and maintaining robust, secure network infrastructures.</p>
+    </div>
+    <div id="panel-experience" class="info-panel" aria-modal="true" role="dialog">
+        <button class="exit-button" aria-label="Close panel">[x]</button>
+        <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Rack_02: Core_Router (Experience)</h2>
+        <div id="experience-content">
+            <h3 class="font-bold text-white">Network Administrator | Tech Corp</h3>
+            <p class="text-sm text-gray-400 mb-2">2021 - Present</p>
+            <ul class="list-disc list-inside text-gray-300">
+                <li>Managed and monitored a network of 200+ Linux servers.</li>
+                <li>Implemented security protocols and firewall configurations.</li>
+                <li>Automated system updates using Bash and Python scripts.</li>
+            </ul>
+        </div>
+        <button id="generate-cover-letter" class="gemini-button">✨ Generate Cover Letter Snippet</button>
+        <div id="experience-output" class="gemini-output hidden"></div>
+    </div>
+    <div id="panel-projects" class="info-panel" aria-modal="true" role="dialog">
+        <button class="exit-button" aria-label="Close panel">[x]</button>
+        <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Rack_03: Project_Server (Projects)</h2>
+        <div id="project-content">
+            <h3 class="font-bold text-white">Home Lab Network</h3>
+            <p class="text-gray-300">Designed and built a segmented home network with pfSense, running services like Pi-hole and a local file server on a Proxmox virtual environment.</p>
+            <a href="#" class="text-cyan-400 hover:underline mt-2 inline-block">View on GitHub &rarr;</a>
+        </div>
+        <button id="generate-suggestions" class="gemini-button">✨ Suggest Project Improvements</button>
+        <div id="project-output" class="gemini-output hidden"></div>
+    </div>
+    <div id="panel-contact" class="info-panel text-center" aria-modal="true" role="dialog">
+        <button class="exit-button" aria-label="Close panel">[x]</button>
+        <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Rack_04: WAN_Gateway (Contact)</h2>
+        <p>You've reached the edge of the network. Let's connect.</p>
+        <p class="text-lg text-white mt-4">your.email@example.com</p>
+    </div>
+
+    <!-- GSAP Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Three.js (module version for CDN import) -->
+    <script type="module">
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
+
+        // --- THREE.JS SCENE SETUP ---
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x0a0a1a, 70, 150);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.25;
+
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        camera.position.set(0, 8, 40);
+        camera.lookAt(0, 5, 0);
+
+        // --- DATA CENTER ENVIRONMENT ---
+        const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x1f2937, metalness: 0.8, roughness: 0.4 });
+        const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 200), floorMaterial);
+        floor.rotation.x = -Math.PI / 2;
+        scene.add(floor);
+
+        const ceilingMaterial = new THREE.MeshStandardMaterial({ color: 0x1f2937, metalness: 0.6, roughness: 0.3 });
+        const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(30, 200), ceilingMaterial);
+        ceiling.position.y = 20;
+        ceiling.rotation.x = Math.PI / 2;
+        scene.add(ceiling);
+
+        // --- Device Creation Functions & Materials ---
+        const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x2d3748, roughness: 0.6, metalness: 0.2 });
+        const heroMaterial = new THREE.MeshStandardMaterial({ color: 0x1e40af, emissive: 0x38bdf8, emissiveIntensity: 2, toneMapped: false });
+        const lightMaterial = new THREE.MeshStandardMaterial({ color: 0x4ade80, emissive: 0x4ade80, emissiveIntensity: 1, toneMapped: false });
+
+        function createServerRack(isHero = false) {
+            const group = new THREE.Group();
+            const frameGeo = new THREE.BoxGeometry(8, 18, 5);
+            const frame = new THREE.Mesh(frameGeo, baseMaterial);
+            group.add(frame);
+            for (let i = 0; i < 12; i++) {
+                const bladeGeo = new THREE.BoxGeometry(7.5, 1.2, 4.8);
+                const blade = new THREE.Mesh(bladeGeo, isHero ? heroMaterial.clone() : baseMaterial.clone());
+                blade.position.y = 8 - i * 1.4;
+                group.add(blade);
+                if (Math.random() > 0.3) {
+                    const led = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.1, 8), lightMaterial);
+                    led.position.set(-3.5, blade.position.y, 2.55);
+                    led.rotation.x = Math.PI / 2;
+                    group.add(led);
+                }
+            }
+            if (isHero) {
+                const heroLight = new THREE.PointLight(0x38bdf8, 10, 20);
+                heroLight.position.y = 8;
+                group.add(heroLight);
+                group.userData.heroLight = heroLight;
+            }
+            return group;
+        }
+
+        // --- PLACING RACKS IN THE SCENE ---
+        const sections = ["about", "experience", "projects", "contact"];
+        const heroRackPositions = [-10, -50, -90, -130];
+        const heroRacks = [];
+
+        for (let i = 0; i < 20; i++) {
+            const zPos = -i * 10;
+            const isHero = heroRackPositions.includes(zPos);
+
+            const rackLeft = createServerRack(isHero);
+            rackLeft.position.set(-12, 9, zPos);
+            scene.add(rackLeft);
+
+            const rackRight = createServerRack(false);
+            rackRight.position.set(12, 9, zPos);
+            scene.add(rackRight);
+
+            if(isHero) {
+                const sectionIndex = heroRackPositions.indexOf(zPos);
+                rackLeft.userData = { id: sectionIndex, name: sections[sectionIndex], isHero: true };
+                heroRacks.push(rackLeft);
+            }
+        }
+
+        // --- LIGHTING SETUP ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0x0a0a1a, 2);
+        scene.add(hemisphereLight);
+
+        for (let i = 0; i < 15; i++) {
+            const light = new THREE.PointLight(0xadd8e6, 2.5, 40);
+            light.position.set(0, 18, -i * 15 + 20);
+            scene.add(light);
+        }
+
+        const cameraLight = new THREE.PointLight(0xffffff, 0.8, 60);
+        camera.add(cameraLight);
+        scene.add(camera);
+
+        // --- GSAP SCROLL & CLICK ANIMATION ---
+        let currentZoomAnimation;
+
+        gsap.to(camera.position, {
+            z: -180,
+            scrollTrigger: {
+                trigger: "#scroll-container",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1.5
+            }
+        });
+
+        function navigateToNode(targetNode) {
+            const targetPosition = targetNode.position.clone();
+            const finalPosition = new THREE.Vector3(targetPosition.x + 12, targetPosition.y, targetPosition.z);
+
+            if (currentZoomAnimation) {
+                currentZoomAnimation.kill();
+            }
+
+            currentZoomAnimation = gsap.to(camera.position, {
+                x: finalPosition.x,
+                y: finalPosition.y,
+                z: finalPosition.z,
+                duration: 1.5,
+                ease: "power3.inOut",
+            });
+
+            showPanel(`#panel-${targetNode.userData.name}`);
+        }
+
+        function returnToAisleView() {
+            if (currentZoomAnimation) {
+                currentZoomAnimation.kill();
+            }
+            const currentScroll = window.scrollY || document.documentElement.scrollTop;
+            const scrollPercent = currentScroll / (document.documentElement.scrollHeight - window.innerHeight);
+            const targetZ = 40 - 220 * scrollPercent;
+
+            gsap.to(camera.position, {
+                x: 0,
+                y: 8,
+                z: targetZ,
+                duration: 1.5,
+                ease: "power3.inOut",
+            });
+            gsap.to(".info-panel", { opacity: 0, visibility: 'hidden', duration: 0.5 });
+        }
+
+        function showPanel(panelId) {
+            gsap.to(".info-panel", { opacity: 0, visibility: 'hidden', duration: 0.5 });
+            gsap.to(panelId, { opacity: 1, visibility: 'visible', duration: 0.5, delay: 0.8 });
+        }
+
+        // --- NAVIGATION LOGIC ---
+        function handleRackClick(event) {
+            // Ignore clicks on UI panels or Gemini buttons
+            if (event.target.classList.contains('gemini-button') || event.target.closest('.info-panel')) return;
+
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(heroRacks, true);
+
+            if (intersects.length > 0) {
+                let obj = intersects[0].object;
+                while(obj.parent && obj.userData.id === undefined) {
+                    obj = obj.parent;
+                }
+                if (obj.userData.id !== undefined) {
+                    navigateToNode(obj);
+                }
+            }
+        }
+        window.addEventListener('click', handleRackClick);
+
+        // Touch support for mobile
+        window.addEventListener('touchstart', function(event) {
+            if (event.touches.length === 1) {
+                handleRackClick({
+                    clientX: event.touches[0].clientX,
+                    clientY: event.touches[0].clientY,
+                    target: event.target
+                });
+            }
+        });
+
+        document.querySelectorAll('.exit-button').forEach(button => {
+            button.addEventListener('click', returnToAisleView);
+        });
+
+        // --- HOVER EFFECT LOGIC ---
+        let hoveredObject = null;
+        function handleMouseMove(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(heroRacks, true);
+
+            let intersectedNode = null;
+            if (intersects.length > 0) {
+                let obj = intersects[0].object;
+                while(obj.parent && obj.userData.id === undefined) {
+                    obj = obj.parent;
+                }
+                if (obj.userData.id !== undefined) {
+                    intersectedNode = obj;
+                }
+            }
+
+            if (hoveredObject !== intersectedNode) {
+                if (hoveredObject) {
+                    gsap.to(hoveredObject.scale, { x: 1, y: 1, z: 1, duration: 0.3 });
+                    if (hoveredObject.userData.heroLight) {
+                        gsap.to(hoveredObject.userData.heroLight, { intensity: 10, duration: 0.3 });
+                    }
+                }
+
+                hoveredObject = intersectedNode;
+
+                if (hoveredObject) {
+                    gsap.to(hoveredObject.scale, { x: 1.05, y: 1.05, z: 1.05, duration: 0.3 });
+                    if (hoveredObject.userData.heroLight) {
+                        gsap.to(hoveredObject.userData.heroLight, { intensity: 25, duration: 0.3, yoyo: true, repeat: -1 });
+                    }
+                }
+            }
+
+            document.body.style.cursor = intersectedNode ? 'pointer' : 'grab';
+        }
+        window.addEventListener('mousemove', handleMouseMove);
+
+        // --- GEMINI API INTEGRATION ---
+        function typeWriter(element, text) {
+            element.innerHTML = "";
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, 20);
+                }
+            }
+            type();
+        }
+
+        async function callGeminiAPI(prompt, outputElement, button) {
+            outputElement.classList.remove('hidden');
+            outputElement.innerHTML = '<div class="loading-indicator"></div>';
+            button.disabled = true;
+
+            let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+            const payload = { contents: chatHistory };
+            // WARNING: Never expose your real API key in public code!
+            const apiKey = ""; // <-- Insert your Gemini API key here (for demo only)
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+                const result = await response.json();
+                if (result.candidates && result.candidates[0]?.content?.parts?.[0]) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    typeWriter(outputElement, text);
+                } else {
+                    outputElement.innerText = "Error: Could not retrieve a valid response from the AI.";
+                }
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                outputElement.innerText = "An error occurred while contacting the AI. Please check the console.";
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        document.getElementById('generate-suggestions').addEventListener('click', (e) => {
+            const projectText = document.getElementById('project-content').innerText;
+            const prompt = `Based on the following project description, suggest 3 creative ideas for improvements, new features, or related technologies to explore. Keep the suggestions concise and actionable. Format the response as a simple list.\n\nProject: "${projectText}"`;
+            callGeminiAPI(prompt, document.getElementById('project-output'), e.target);
+        });
+
+        document.getElementById('generate-cover-letter').addEventListener('click', (e) => {
+            const experienceText = document.getElementById('experience-content').innerText;
+            const prompt = `Based on the following job experience, write a short, professional paragraph (2-3 sentences) for a cover letter. Highlight the key skills and achievements.\n\nExperience: "${experienceText}"`;
+            callGeminiAPI(prompt, document.getElementById('experience-output'), e.target);
+        });
+
+        // --- RENDER LOOP & RESIZE HANDLER ---
+        const targetLookAt = new THREE.Vector3();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            let lookAtTarget = new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z - 20);
+
+            targetLookAt.lerp(lookAtTarget, 0.1);
+            camera.lookAt(targetLookAt);
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+    </script>
+</body>
+</html>
