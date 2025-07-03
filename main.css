@@ -1,0 +1,114 @@
+body {
+    font-family: 'Roboto Mono', monospace;
+    background-color: #0a0a1a;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#bg-canvas {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100vw; 
+    height: 100vh;
+    z-index: 1;
+}
+
+#scroll-container {
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100vw; 
+    height: 500vh;
+    z-index: 2;
+}
+
+.info-panel {
+    position: fixed;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw; 
+    max-width: 500px;
+    background: rgba(10, 25, 47, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid #38bdf8;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    z-index: 10;
+    visibility: hidden;
+    opacity: 0;
+    box-shadow: 0 0 25px rgba(56, 189, 248, 0.3);
+    transition: opacity 0.5s, visibility 0.5s;
+}
+
+.exit-button {
+    position: absolute;
+    top: 0.5rem; 
+    right: 0.75rem;
+    font-size: 1.5rem;
+    color: #f87171;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.exit-button:hover { 
+    color: #ef4444; 
+}
+
+.gemini-button {
+    background-color: #38bdf8;
+    color: #0a0a1a;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 1rem;
+}
+
+.gemini-button:hover { 
+    background-color: #7dd3fc; 
+}
+
+.gemini-output {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 0.5rem;
+    border: 1px dashed #0e7490;
+    min-height: 50px;
+    white-space: pre-wrap;
+}
+
+.loading-indicator {
+    display: inline-block;
+    width: 1em; 
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 0.5rem;
+}
+
+@keyframes spin { 
+    to { 
+        transform: rotate(360deg); 
+    } 
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .info-panel { 
+        padding: 1rem; 
+    }
+} 
