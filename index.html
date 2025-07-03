@@ -96,6 +96,15 @@
     <!-- 3D Background Canvas -->
     <canvas id="bg-canvas"></canvas>
     <div id="scroll-container"></div>
+    
+    <!-- Navigation Instructions -->
+    <div class="fixed top-4 left-4 z-20 bg-black bg-opacity-50 text-white p-3 rounded-lg text-sm max-w-xs">
+        <h3 class="font-bold text-cyan-400 mb-2">Navigation Guide</h3>
+        <p class="mb-1">• Scroll to move through the data center</p>
+        <p class="mb-1">• Click on glowing blue racks to explore sections</p>
+        <p class="mb-1">• Hover over racks to see interactive elements</p>
+        <p class="text-xs text-gray-400 mt-2">Look for the bright blue racks with labels above them!</p>
+    </div>
 
     <!-- UI Panels for each section -->
     <div id="panel-about" class="info-panel" aria-modal="true" role="dialog">
@@ -145,12 +154,12 @@
 
         // --- THREE.JS SCENE SETUP ---
         const scene = new THREE.Scene();
-        scene.fog = new THREE.Fog(0x0a0a1a, 70, 150);
+        scene.fog = new THREE.Fog(0x0a0a1a, 100, 200);
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.25;
+        renderer.toneMappingExposure = 1.8;
 
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
@@ -159,21 +168,21 @@
         camera.lookAt(0, 5, 0);
 
         // --- DATA CENTER ENVIRONMENT ---
-        const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x1f2937, metalness: 0.8, roughness: 0.4 });
+        const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x374151, metalness: 0.6, roughness: 0.3 });
         const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 200), floorMaterial);
         floor.rotation.x = -Math.PI / 2;
         scene.add(floor);
 
-        const ceilingMaterial = new THREE.MeshStandardMaterial({ color: 0x1f2937, metalness: 0.6, roughness: 0.3 });
+        const ceilingMaterial = new THREE.MeshStandardMaterial({ color: 0x374151, metalness: 0.5, roughness: 0.2 });
         const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(30, 200), ceilingMaterial);
         ceiling.position.y = 20;
         ceiling.rotation.x = Math.PI / 2;
         scene.add(ceiling);
 
         // --- Device Creation Functions & Materials ---
-        const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x2d3748, roughness: 0.6, metalness: 0.2 });
-        const heroMaterial = new THREE.MeshStandardMaterial({ color: 0x1e40af, emissive: 0x38bdf8, emissiveIntensity: 2, toneMapped: false });
-        const lightMaterial = new THREE.MeshStandardMaterial({ color: 0x4ade80, emissive: 0x4ade80, emissiveIntensity: 1, toneMapped: false });
+        const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x4a5568, roughness: 0.4, metalness: 0.3 });
+        const heroMaterial = new THREE.MeshStandardMaterial({ color: 0x1e40af, emissive: 0x38bdf8, emissiveIntensity: 3, toneMapped: false });
+        const lightMaterial = new THREE.MeshStandardMaterial({ color: 0x4ade80, emissive: 0x4ade80, emissiveIntensity: 2, toneMapped: false });
 
         function createServerRack(isHero = false) {
             const group = new THREE.Group();
@@ -222,23 +231,47 @@
                 const sectionIndex = heroRackPositions.indexOf(zPos);
                 rackLeft.userData = { id: sectionIndex, name: sections[sectionIndex], isHero: true };
                 heroRacks.push(rackLeft);
+                
+                // Add a floating label above hero racks
+                const labelGeometry = new THREE.PlaneGeometry(6, 1);
+                const labelMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0x38bdf8, 
+                    transparent: true, 
+                    opacity: 0.8 
+                });
+                const label = new THREE.Mesh(labelGeometry, labelMaterial);
+                label.position.set(-12, 20, zPos);
+                label.lookAt(camera.position);
+                scene.add(label);
             }
         }
 
         // --- LIGHTING SETUP ---
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
         scene.add(ambientLight);
 
-        const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0x0a0a1a, 2);
+        const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0x0a0a1a, 3);
         scene.add(hemisphereLight);
 
-        for (let i = 0; i < 15; i++) {
-            const light = new THREE.PointLight(0xadd8e6, 2.5, 40);
-            light.position.set(0, 18, -i * 15 + 20);
+        // Add more ceiling lights for better visibility
+        for (let i = 0; i < 25; i++) {
+            const light = new THREE.PointLight(0xffffff, 4, 30);
+            light.position.set(0, 18, -i * 8 + 20);
             scene.add(light);
         }
 
-        const cameraLight = new THREE.PointLight(0xffffff, 0.8, 60);
+        // Add side lighting for better rack visibility
+        for (let i = 0; i < 20; i++) {
+            const leftLight = new THREE.PointLight(0xadd8e6, 3, 25);
+            leftLight.position.set(-15, 12, -i * 10 + 10);
+            scene.add(leftLight);
+            
+            const rightLight = new THREE.PointLight(0xadd8e6, 3, 25);
+            rightLight.position.set(15, 12, -i * 10 + 10);
+            scene.add(rightLight);
+        }
+
+        const cameraLight = new THREE.PointLight(0xffffff, 1.5, 80);
         camera.add(cameraLight);
         scene.add(camera);
 
