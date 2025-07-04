@@ -66,25 +66,6 @@
             color: #ef4444;
         }
 
-        #reset-view-button {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-            background-color: rgba(56, 189, 248, 0.8);
-            color: #0a0a1a;
-            border: 1px solid #38bdf8;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        #reset-view-button:hover {
-             background-color: #7dd3fc;
-            box-shadow: 0 0 15px #7dd3fc;
-        }
     </style>
 </head>
 <body>
@@ -95,31 +76,103 @@
     <div id="panel-about" class="info-panel">
         <button class="exit-button">[x]</button>
         <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Node: Workstation (About Me)</h2>
-        <p>This workstation represents my core skills and background. I am a network and Linux enthusiast with a deep passion for understanding how systems communicate and operate.</p>
+        <p>A passionate and detail-oriented network and Linux enthusiast with a deep curiosity for how systems communicate and operate. My journey began with a simple curiosity for the command line and has evolved into a career dedicated to building and maintaining robust, secure, and efficient network infrastructures.</p>
     </div>
 
     <div id="panel-experience" class="info-panel">
         <button class="exit-button">[x]</button>
         <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Node: Router (Experience)</h2>
-        <p>This router symbolizes my professional experience, directing traffic and making connections. As a Network Administrator, I've managed extensive server networks and implemented robust security protocols.</p>
+        <div class="space-y-4">
+            <div>
+                <h3 class="font-bold text-white">NOC Analyst | Penn State Health</h3>
+                <p class="text-sm text-gray-400 mb-2">March 2025 - Present</p>
+                <ul class="list-disc list-inside text-gray-300 text-sm">
+                    <li>Actively monitor network and server performance using LogicMonitor.</li>
+                    <li>Manage and oversee critical workflows in Active Batch.</li>
+                    <li>Execute server patching and maintenance routines.</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold text-white">IT Operations Analyst | WellSpan Health</h3>
+                <p class="text-sm text-gray-400 mb-2">August 2024 - March 2025</p>
+                <ul class="list-disc list-inside text-gray-300 text-sm">
+                    <li>Monitored network performance across local hospitals and healthcare centers.</li>
+                    <li>Performed real-time analysis of network events using SCOM and Orion.</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold text-white">IT Technician | Nordstrom</h3>
+                <p class="text-sm text-gray-400 mb-2">June 2023 - June 2024</p>
+                <ul class="list-disc list-inside text-gray-300 text-sm">
+                    <li>Provided technical support to fulfillment center staff.</li>
+                    <li>Installed, configured, and maintained warehouse technology.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div id="panel-skills" class="info-panel">
+        <button class="exit-button">[x]</button>
+        <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Node: Core_Switch (Skills & Certs)</h2>
+        <div class="space-y-4">
+            <div>
+                <h3 class="font-bold text-white">Skills</h3>
+                <ul class="list-disc list-inside text-gray-300 text-sm">
+                    <li>Operating Systems: Windows, MacOS, Linux</li>
+                    <li>Networking: Cisco</li>
+                    <li>Virtualization: VMWare</li>
+                    <li>Tools: PuTTy, Jira, ServiceNow, Cursor, Firebase Studio, GitHub, VSCode</li>
+                    <li>Programming: Python, Bash, Powershell, AI Prompt Engineering</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold text-white">Certifications</h3>
+                <ul class="list-disc list-inside text-gray-300 text-sm">
+                    <li>Google Cybersecurity Professional Certificate</li>
+                    <li>Certified LogicMonitor Associate</li>
+                    <li>In Progress: Cisco Certified Network Associate (CCNA)</li>
+                </ul>
+            </div>
+             <div>
+                <h3 class="font-bold text-white">Education</h3>
+                <p class="text-sm text-gray-300">Bachelor of Science in Information Technology - University of Phoenix, 2022</p>
+            </div>
+        </div>
     </div>
 
     <div id="panel-projects" class="info-panel">
         <button class="exit-button">[x]</button>
         <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Node: Server (Projects)</h2>
-        <p>This server hosts my key projects, such as a home lab network built with pfSense and Proxmox, showcasing my hands-on skills in virtualization and network services.</p>
-        <a href="#" class="text-cyan-400 hover:underline mt-2 inline-block">View on GitHub &rarr;</a>
+        <div id="project-content" class="space-y-4">
+            <div>
+                <h3 class="font-bold text-white">Proxmox Homelab Server</h3>
+                <p class="text-gray-300 text-sm">Deployed a Proxmox virtual environment on a dedicated PC to host and manage various network services and applications.</p>
+            </div>
+            <div>
+                <h3 class="font-bold text-white">Network Attached Storage (NAS)</h3>
+                <p class="text-gray-300 text-sm">Set up a centralized file storage server for backups, media sharing, and general file storage, accessible across the network. This demonstrates knowledge of basic networking, storage concepts, and OS fundamentals.</p>
+                <p class="text-xs text-gray-400 mt-1">Technologies: TrueNAS, OpenMediaVault, Samba</p>
+            </div>
+            <div>
+                <h3 class="font-bold text-white">Pi-hole Ad Blocker</h3>
+                <p class="text-gray-300 text-sm">Implemented a network-level ad blocker to improve performance and security for all connected devices. This project involved DNS, basic Linux administration, and router configuration.</p>
+                <p class="text-xs text-gray-400 mt-1">Technologies: Raspberry Pi, Pi-hole</p>
+            </div>
+        </div>
     </div>
 
     <div id="panel-contact" class="info-panel text-center">
         <button class="exit-button">[x]</button>
         <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Node: The Cloud (Contact)</h2>
-        <p>This cloud represents my connection to the wider world. Let's connect.</p>
-        <p class="text-lg text-white mt-4">your.email@example.com</p>
+        <p class="mb-4">You've reached the edge of the network. Let's connect.</p>
+        <div class="space-y-2 text-left">
+            <p><span class="font-bold text-cyan-400">Email:</span> wittceec@gmail.com</p>
+            <p><span class="font-bold text-cyan-400">Phone:</span> 319-450-3926</p>
+            <p><span class="font-bold text-cyan-400">LinkedIn:</span> linkedin.com/in/christopher-wittman</p>
+            <p><span class="font-bold text-cyan-400">GitHub:</span> github.com/Wittceec</p>
+        </div>
     </div>
     
-    <button id="reset-view-button">[ Reset View ]</button>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script type="module">
         import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
@@ -149,23 +202,16 @@
         scene.add(dirLight);
 
         // --- ENVIRONMENT ---
-        const floorGeo = new THREE.PlaneGeometry(80, 100);
-        const floorMat = new THREE.MeshStandardMaterial({ color: 0x1a202c, metalness: 0.9, roughness: 0.4 });
-        const floor = new THREE.Mesh(floorGeo, floorMat);
-        floor.rotation.x = -Math.PI / 2;
-        scene.add(floor);
-        
         const grid = new THREE.GridHelper(200, 40, 0x0e7490, 0x0e7490);
         grid.material.opacity = 0.2;
         grid.material.transparent = true;
         scene.add(grid);
 
         // --- DEVICE MODELS & POSITIONS ---
-        const sections = ["contact", "experience", "projects", "about"];
         const nodePositions = {
             contact: new THREE.Vector3(0, 5, 25),
             experience: new THREE.Vector3(0, 2, 5),
-            switch: new THREE.Vector3(0, 1, -10),
+            skills: new THREE.Vector3(0, 1, -10),
             projects: new THREE.Vector3(20, 4, -25),
             about: new THREE.Vector3(-20, 2, -25),
         };
@@ -194,7 +240,7 @@
         }
         function createSwitch() {
             const group = new THREE.Group();
-            const body = new THREE.Mesh(new THREE.BoxGeometry(8, 1, 4), baseMaterial);
+            const body = new THREE.Mesh(new THREE.BoxGeometry(8, 1, 4), accentMaterial);
             group.add(body);
             return group;
         }
@@ -212,12 +258,44 @@
             return group;
         }
         
+        function createLabel(text) {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            const fontSize = 64;
+            const labelText = `// ${text.toUpperCase()}`;
+            context.font = `bold ${fontSize}px 'Roboto Mono', monospace`;
+            
+            canvas.width = context.measureText(labelText).width;
+            canvas.height = fontSize + 10; // Add padding
+            
+            // Re-apply font after resizing canvas
+            context.font = `bold ${fontSize}px 'Roboto Mono', monospace`;
+            context.fillStyle = '#38bdf8';
+            context.fillText(labelText, 0, fontSize);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const spriteMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
+            const sprite = new THREE.Sprite(spriteMaterial);
+            
+            sprite.scale.set(canvas.width / 30, canvas.height / 30, 1.0);
+            return sprite;
+        }
+
         // Create and place models
         const modelCreators = {
             contact: createCloud,
             experience: createRouter,
             projects: createServer,
-            about: createWorkstation
+            about: createWorkstation,
+            skills: createSwitch
+        };
+        
+        const labelYOffsets = {
+            contact: 8,
+            experience: 4,
+            projects: 8,
+            about: 5,
+            skills: 3
         };
         
         for (const key in modelCreators) {
@@ -229,19 +307,19 @@
             });
             scene.add(modelGroup);
             clickableGroups.push(modelGroup);
-        }
 
-        const switchModel = createSwitch();
-        switchModel.position.copy(nodePositions.switch);
-        scene.add(switchModel);
+            const label = createLabel(key);
+            label.position.set(nodePositions[key].x, nodePositions[key].y + labelYOffsets[key], nodePositions[key].z);
+            scene.add(label);
+        }
 
         // --- CABLING ---
         const cableMaterial = new THREE.MeshBasicMaterial({ color: 0x0e7490 });
         const connections = [
             [nodePositions.contact, nodePositions.experience],
-            [nodePositions.experience, nodePositions.switch],
-            [nodePositions.switch, nodePositions.projects],
-            [nodePositions.switch, nodePositions.about]
+            [nodePositions.experience, nodePositions.skills],
+            [nodePositions.skills, nodePositions.projects],
+            [nodePositions.skills, nodePositions.about]
         ];
         connections.forEach(points => {
             const curve = new THREE.CatmullRomCurve3(points);
@@ -295,10 +373,12 @@
                     obj = obj.parent;
                 }
                 navigateToNode(obj);
+            } else {
+                returnToMapView();
             }
         });
         
-        document.querySelectorAll('.exit-button, #reset-view-button').forEach(button => {
+        document.querySelectorAll('.exit-button').forEach(button => {
             button.addEventListener('click', returnToMapView);
         });
 
