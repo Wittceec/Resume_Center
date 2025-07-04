@@ -81,7 +81,7 @@
 
     <div id="panel-experience" class="info-panel">
         <button class="exit-button">[x]</button>
-        <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Node: Router (Experience)</h2>
+        <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Node: Router (IT Experience)</h2>
         <div class="space-y-4">
             <div>
                 <h3 class="font-bold text-white">NOC Analyst | Penn State Health</h3>
@@ -106,6 +106,30 @@
                 <ul class="list-disc list-inside text-gray-300 text-sm">
                     <li>Provided technical support to fulfillment center staff.</li>
                     <li>Installed, configured, and maintained warehouse technology.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div id="panel-previous_experience" class="info-panel">
+        <button class="exit-button">[x]</button>
+        <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Node: Access_Point (Foundational Experience)</h2>
+        <div class="space-y-4">
+            <div>
+                <h3 class="font-bold text-white">Computer Operator | IGT</h3>
+                <p class="text-sm text-gray-400 mb-2">March 2022 - June 2023</p>
+                <ul class="list-disc list-inside text-gray-300 text-sm">
+                    <li>Supported 80+ locations throughout Pennsylvania remotely for repair and maintenance of slot machines and systems.</li>
+                    <li>Maintained/monitored Linux servers hosting all casinos throughout Pennsylvania.</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold text-white">Fulfillment Specialist | Nordstrom</h3>
+                <p class="text-sm text-gray-400 mb-2">2015 - 2022</p>
+                <ul class="list-disc list-inside text-gray-300 text-sm">
+                    <li>Processed and fulfilled customer orders with high accuracy and efficiency.</li>
+                    <li>Managed inventory and conducted quality control checks on products.</li>
+                    <li>Operated warehouse management systems to track and manage stock.</li>
                 </ul>
             </div>
         </div>
@@ -145,6 +169,10 @@
         <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Node: Server (Projects)</h2>
         <div id="project-content" class="space-y-4">
             <div>
+                <h3 class="font-bold text-white">Linux Daily Driver</h3>
+                <p class="text-gray-300 text-sm">Transitioned my daily driver laptop from Windows 11 to Arch Linux with the Hyprland window manager. This project showcases a deep understanding of Linux systems, from installation and configuration to daily use and troubleshooting.</p>
+            </div>
+            <div>
                 <h3 class="font-bold text-white">Proxmox Homelab Server</h3>
                 <p class="text-gray-300 text-sm">Deployed a Proxmox virtual environment on a dedicated PC to host and manage various network services and applications.</p>
             </div>
@@ -166,10 +194,10 @@
         <h2 class="text-2xl font-bold text-cyan-400 mb-4">// Node: The Cloud (Contact)</h2>
         <p class="mb-4">You've reached the edge of the network. Let's connect.</p>
         <div class="space-y-2 text-left">
-            <p><span class="font-bold text-cyan-400">Email:</span> wittceec@gmail.com</p>
-            <p><span class="font-bold text-cyan-400">Phone:</span> 319-450-3926</p>
-            <p><span class="font-bold text-cyan-400">LinkedIn:</span> linkedin.com/in/christopher-wittman</p>
-            <p><span class="font-bold text-cyan-400">GitHub:</span> github.com/Wittceec</p>
+            <p><span class="font-bold text-cyan-400">Email:</span> <a href="mailto:wittceec@gmail.com" class="text-white hover:underline">wittceec@gmail.com</a></p>
+            <p><span class="font-bold text-cyan-400">Phone:</span> <a href="tel:3194503926" class="text-white hover:underline">319-450-3926</a></p>
+            <p><span class="font-bold text-cyan-400">LinkedIn:</span> <a href="https://www.linkedin.com/in/christopher-wittman/" target="_blank" rel="noopener noreferrer" class="text-white hover:underline">linkedin.com/in/christopher-wittman</a></p>
+            <p><span class="font-bold text-cyan-400">GitHub:</span> <a href="https://github.com/Wittceec" target="_blank" rel="noopener noreferrer" class="text-white hover:underline">github.com/Wittceec</a></p>
         </div>
     </div>
     
@@ -214,6 +242,7 @@
             skills: new THREE.Vector3(0, 1, -10),
             projects: new THREE.Vector3(20, 4, -25),
             about: new THREE.Vector3(-20, 2, -25),
+            previous_experience: new THREE.Vector3(30, 2, 5)
         };
         
         const clickableGroups = [];
@@ -257,6 +286,12 @@
             group.add(monitorBody);
             return group;
         }
+        function createAccessPoint() {
+            const group = new THREE.Group();
+            const body = new THREE.Mesh(new THREE.CylinderGeometry(2, 2, 0.5, 32), accentMaterial);
+            group.add(body);
+            return group;
+        }
         
         function createLabel(text) {
             const canvas = document.createElement('canvas');
@@ -287,7 +322,8 @@
             experience: createRouter,
             projects: createServer,
             about: createWorkstation,
-            skills: createSwitch
+            skills: createSwitch,
+            previous_experience: createAccessPoint
         };
         
         const labelYOffsets = {
@@ -295,7 +331,8 @@
             experience: 4,
             projects: 8,
             about: 5,
-            skills: 3
+            skills: 3,
+            previous_experience: 4
         };
         
         for (const key in modelCreators) {
@@ -308,7 +345,7 @@
             scene.add(modelGroup);
             clickableGroups.push(modelGroup);
 
-            const label = createLabel(key);
+            const label = createLabel(key.replace('_', ' '));
             label.position.set(nodePositions[key].x, nodePositions[key].y + labelYOffsets[key], nodePositions[key].z);
             scene.add(label);
         }
@@ -319,7 +356,8 @@
             [nodePositions.contact, nodePositions.experience],
             [nodePositions.experience, nodePositions.skills],
             [nodePositions.skills, nodePositions.projects],
-            [nodePositions.skills, nodePositions.about]
+            [nodePositions.skills, nodePositions.about],
+            [nodePositions.experience, nodePositions.previous_experience]
         ];
         connections.forEach(points => {
             const curve = new THREE.CatmullRomCurve3(points);
